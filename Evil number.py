@@ -33,14 +33,16 @@ def count_even_ones_by_brute_force(num):
                 inter_sum += 1
         if inter_sum % 2 == 0:
             res += 1
+            print(i, end = " ")
+    print()
     return res
 
 num = 100
-print("Number of evil numbers <=", num)
-print("Count by Thue-Morse sequence:", count_even_ones_by_pattern(num))
+print(f"Evil numbers <= {num}:")
 print("Count by brute force:", count_even_ones_by_brute_force(num))
+print("Count by Thue-Morse sequence:", count_even_ones_by_pattern(num))
 print()
 num = 2025
-print("Number of evil numbers <=", num)
-print("Count by Thue-Morse sequence:", count_even_ones_by_pattern(num))
+print(f"Evil numbers <= {num}:")
 print("Count by brute force:", count_even_ones_by_brute_force(num))
+print("Count by Thue-Morse sequence:", count_even_ones_by_pattern(num))
