@@ -3,8 +3,11 @@ def count_even_ones_by_pattern(num):
     # Convert num to binary and remove '0b' prefix
     bin_num = bin(num)[2:]
     
+    # Zero number of 1s is even so 0 is evil
+    count_e = 1
+    
     # Calculate the sum of 2^n for n < len(bin_num) - 1
-    count_e = sum(2**n for n in range(len(bin_num) - 2))
+    count_e += sum(2**n for n in range(len(bin_num) - 2))
     
     # Initialize Odd_even_format
     odd_even_format = 'o'
@@ -26,15 +29,15 @@ def count_even_ones_by_pattern(num):
 
 def count_even_ones_by_brute_force(num):
     res = 0
-    for i in range(2, num+1):
+    for i in range(0, num+1):
         inter_sum = 0
         for char in bin(i)[2:]:
             if char == '1':
                 inter_sum += 1
         if inter_sum % 2 == 0:
             res += 1
-            print(i, end = " ")
-    print()
+            # print(i, end = " ")
+    # print()
     return res
 
 num = 100
