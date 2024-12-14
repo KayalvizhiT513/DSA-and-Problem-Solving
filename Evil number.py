@@ -20,7 +20,7 @@ def count_even_ones_by_pattern(num):
         odd_even_format = temp
     
     # Count the number of 'e's in the first num - 2^(len(bin_num)) + 1 positions
-    count_e += odd_even_format[:num - 2**(len(bin_num)) + 1].count('e')
+    count_e += odd_even_format[:num - 2**(len(bin_num)-1) + 1].count('e')
     
     return count_e
 
@@ -35,6 +35,12 @@ def count_even_ones_by_brute_force(num):
             res += 1
     return res
 
-num = 10
-print("Count by pattern:", count_even_ones_by_pattern(num))
+num = 100
+print("Number of evil numbers <=", num)
+print("Count by Thue-Morse sequence:", count_even_ones_by_pattern(num))
+print("Count by brute force:", count_even_ones_by_brute_force(num))
+print()
+num = 2025
+print("Number of evil numbers <=", num)
+print("Count by Thue-Morse sequence:", count_even_ones_by_pattern(num))
 print("Count by brute force:", count_even_ones_by_brute_force(num))
