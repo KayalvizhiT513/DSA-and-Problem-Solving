@@ -1,88 +1,109 @@
-import numpy as np
 import math
 
-input_list = [18, 10, 20, 19, 17, 9, 8]
+# Max Heap
+def construct_max_heap(heap, index):
+    while index > 0:
+        parent = (index - 1) // 2
+        if heap[parent] < heap[index]:
+            heap[parent], heap[index] = heap[index], heap[parent]
+            index = parent
+        else:
+            break
+    return heap
 
-def construct_max_heap(input_list, ind):
-    if ind < 0 or 2*ind+2 > len(input_list):
-        return input_list
-    parent = input_list[ind]
-    left = input_list[2*ind + 1]
-    right = input_list[2*ind + 2] if 2*ind + 2 < len(input_list) else None
+# Min Heap
+def construct_min_heap(heap, index):
+    while index > 0:
+        parent = (index - 1) // 2
+        if heap[parent] > heap[index]:
+            heap[parent], heap[index] = heap[index], heap[parent]
+            index = parent
+        else:
+            break
+    return heap
 
-    if right == None or left > right:
-        if left > parent:
-            input_list[ind], input_list[2*ind + 1] = left, parent
-            if ind%2 == 2:
-                input_list = construct_max_heap(input_list, (ind-2)//2)
-            else:
-                input_list = construct_max_heap(input_list, (ind-1)//2)
-
-        input_list = construct_max_heap(input_list, ind+1)
-    else:
-         if right > parent:
-            input_list[ind], input_list[2*ind + 2] = right, parent
-            if ind%2 == 2:
-                input_list = construct_max_heap(input_list, (ind-2)//2)
-            else:
-                input_list = construct_max_heap(input_list, (ind-1)//2)
-
-         input_list = construct_max_heap(input_list, ind+1)
-    return input_list
-
-def construct_min_heap(input_list, ind):
-    if ind < 0 or 2*ind+2 > len(input_list):
-        return input_list
-    parent = input_list[ind]
-    left = input_list[2*ind + 1]
-    right = input_list[2*ind + 2] if 2*ind + 2 < len(input_list) else None
-
-    if right == None or left < right:
-        if left < parent:
-            input_list[ind], input_list[2*ind + 1] = left, parent
-            if ind%2 == 2:
-                input_list = construct_min_heap(input_list, (ind-2)//2)
-            else:
-                input_list = construct_min_heap(input_list, (ind-1)//2)
-
-        input_list = construct_min_heap(input_list, ind+1)
-    else:
-         if right < parent:
-            input_list[ind], input_list[2*ind + 2] = right, parent
-            if ind%2 == 2:
-                input_list = construct_min_heap(input_list, (ind-2)//2)
-            else:
-                input_list = construct_min_heap(input_list, (ind-1)//2)
-
-         input_list = construct_min_heap(input_list, ind+1)
-    return input_list
-
-def max_val_in_min_heap(input_list):
-    if len(input_list) == 0:
+# Extract top (max from max-heap)
+def extract_max(heap):
+    if not heap:
         return None
-    n = len(input_list)
+    top = heap[0]
+    heap[0] = heap.pop()
+    heapify_down_max(heap, 0)
+    return top
 
-    lower_level = int(np.floor(math.log2(n))+1)
-    print("Lower level:", lower_level)
+# Extract top (min from min-heap)
+def extract_min(heap):
+    if not heap:
+        return None
+    top = heap[0]
+    heap[0] = heap.pop()
+    heapify_down_min(heap, 0)
+    return top
 
-    num_nodes = 2**(lower_level - 1)
-    print("Num nodes:", num_nodes)
+def heapify_down_max(heap, index):
+    size = len(heap)
+    while index < size:
+        left = 2 * index + 1
+        right = 2 * index + 2
+        largest = index
+        if left < size and heap[left] > heap[largest]:
+            largest = left
+        if right < size and heap[right] > heap[largest]:
+            largest = right
+        if largest == index:
+            break
+        heap[index], heap[largest] = heap[largest], heap[index]
+        index = largest
 
-    max_val = input_list[num_nodes-1]
-    for i in range(num_nodes-1, n):
-        if input_list[i] > max_val:
-            max_val = input_list[i]
-    return max_val
+def heapify_down_min(heap, index):
+    size = len(heap)
+    while index < size:
+        left = 2 * index + 1
+        right = 2 * index + 2
+        smallest = index
+        if left < size and heap[left] < heap[smallest]:
+            smallest = left
+        if right < size and heap[right] < heap[smallest]:
+            smallest = right
+        if smallest == index:
+            break
+        heap[index], heap[smallest] = heap[smallest], heap[index]
+        index = smallest
 
+# Median logic
+def get_median(max_heap, min_heap):
+    if len(max_heap) > len(min_heap):
+        return max_heap[0]
+    elif len(min_heap) > len(max_heap):
+        return min_heap[0]
+    else:
+        return (max_heap[0] + min_heap[0]) / 2
+
+# Driver
+input_list = [18, 10, 20, 19, 17, 9, 8]
 max_heap = []
 min_heap = []
-for idx, ele in enumerate(input_list):
-    if idx%2 == 0:
-        max_heap.append(ele)
-        construct_max_heap(max_heap, 0)
+
+for num in input_list:
+    # Insert to max heap by default
+    if not max_heap or num <= max_heap[0]:
+        max_heap.append(num)
+        construct_max_heap(max_heap, len(max_heap) - 1)
     else:
-        min_heap.append(ele)
-        construct_min_heap(min_heap, 0)
-    
-print("Median:", max_val_in_min_heap(min_heap))
-print(max_heap, min_heap)
+        min_heap.append(num)
+        construct_min_heap(min_heap, len(min_heap) - 1)
+
+    # Balance heaps
+    if len(max_heap) > len(min_heap) + 1:
+        val = extract_max(max_heap)
+        min_heap.append(val)
+        construct_min_heap(min_heap, len(min_heap) - 1)
+    elif len(min_heap) > len(max_heap):
+        val = extract_min(min_heap)
+        max_heap.append(val)
+        construct_max_heap(max_heap, len(max_heap) - 1)
+
+# Output
+print("Max Heap (Lower half):", max_heap)
+print("Min Heap (Upper half):", min_heap)
+print("Median:", get_median(max_heap, min_heap))
