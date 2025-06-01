@@ -28,19 +28,7 @@ def extract_max(heap):
         return None
     top = heap[0]
     heap[0] = heap.pop()
-    heapify_down_max(heap, 0)
-    return top
-
-# Extract top (min from min-heap)
-def extract_min(heap):
-    if not heap:
-        return None
-    top = heap[0]
-    heap[0] = heap.pop()
-    heapify_down_min(heap, 0)
-    return top
-
-def heapify_down_max(heap, index):
+    index = 0
     size = len(heap)
     while index < size:
         left = 2 * index + 1
@@ -54,8 +42,15 @@ def heapify_down_max(heap, index):
             break
         heap[index], heap[largest] = heap[largest], heap[index]
         index = largest
+    return top
 
-def heapify_down_min(heap, index):
+# Extract top (min from min-heap)
+def extract_min(heap):
+    if not heap:
+        return None
+    top = heap[0]
+    heap[0] = heap.pop()
+    index = 0
     size = len(heap)
     while index < size:
         left = 2 * index + 1
@@ -69,6 +64,7 @@ def heapify_down_min(heap, index):
             break
         heap[index], heap[smallest] = heap[smallest], heap[index]
         index = smallest
+    return top
 
 # Median logic
 def get_median(max_heap, min_heap):
@@ -79,13 +75,12 @@ def get_median(max_heap, min_heap):
     else:
         return (max_heap[0] + min_heap[0]) / 2
 
-# Driver
 input_list = [18, 10, 20, 19, 17, 9, 8]
 max_heap = []
 min_heap = []
 
 for num in input_list:
-    # Insert to max heap by default
+    # Insert to max heap the first half and min heap the second half
     if not max_heap or num <= max_heap[0]:
         max_heap.append(num)
         construct_max_heap(max_heap, len(max_heap) - 1)
