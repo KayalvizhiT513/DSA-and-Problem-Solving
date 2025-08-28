@@ -4,4 +4,4 @@ This repository contains a collection of Data Structures and Algorithms (DSA) pr
 ✅ Linked Lists – Singly, doubly, and circular lists with common operations<br>
 ✅ Stacks & Queues – Implementation and real-world applications <br>
 ✅ Trees - Generic tree with n children, BST, Red black tree, AVL tree, Trie structure <br>
-✅ Heap - heapify, sorting and time complexity, min max heap
+✅ Heap - heapify, sorting and time complexity, min max heap.
